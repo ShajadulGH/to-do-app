@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../UI/Button/Button";
 import styles from "./CourseInput.module.css";
 const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
   const [inputValue, setInputValue] = useState("");
+  const focusRef = useRef();
   const chnageHandler = (e) => {
     setInputValue(e.target.value);
   };
@@ -36,13 +37,19 @@ const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
   useEffect(() => {
     if (editTodos) {
       setInputValue(editTodos.text);
+      focusRef.current.focus();
     }
   }, [editTodos, setInputValue]);
   return (
     <form onSubmit={submitHandler}>
       <div className={`${styles["form-control"]}`}>
         <label>To Do List</label>
-        <input value={inputValue} onChange={chnageHandler} type="text" />
+        <input
+          ref={focusRef}
+          value={inputValue}
+          onChange={chnageHandler}
+          type="text"
+        />
       </div>
       <Button type="submit">{!editTodos ? "Add" : "Update"}</Button>
     </form>

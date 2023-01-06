@@ -1,54 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../UI/Button/Button";
 import styles from "./CourseInput.module.css";
-let x = 0;
-const CourseInput = ({ isEditing, editingData, onUpdateGoal, onAddGoal }) => {
-  const [enteredValue, setEnteredValue] = useState("");
-  if (isEditing && x === 0) {
-    setEnteredValue(editingData.editingGoalText);
-    x = 1;
-  }
-  const [isValid, setIsValid] = useState(true);
-
-  const goalInputChangeHandler = (event) => {
-    if (event.target.value.trim().length > 0) {
-      setIsValid(true);
-    }
-    setEnteredValue(event.target.value);
+const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
+  const [inputValue, setInputValue] = useState("");
+  const chnageHandler = (e) => {
+    setInputValue(e.target.value);
   };
-
-  const formSubmitHandler = (event) => {
+  const updateTodo = (inputValue, id, completed) => {
+    const newTodo = todos.map((item) =>
+      item.id === id ? { text: inputValue, id, completed } : item
+    );
+    setTodos(newTodo);
+    setEditTodos(null);
+  };
+  const submitHandler = (event) => {
     event.preventDefault();
-    if (enteredValue.trim() === "") {
-      setIsValid(false);
-      return;
+    if (inputValue.length !== 0) {
+      if (!editTodos) {
+        setTodos((todos) => {
+          const updatedTodo = [...todos];
+          updatedTodo.unshift({
+            id: Math.floor(Math.random() * 1e17).toString(),
+            text: inputValue,
+            completed: false,
+          });
+          return updatedTodo;
+        });
+      } else {
+        updateTodo(inputValue, editTodos.id, editTodos.completed);
+      }
+
+      setInputValue("");
     }
-    if (isEditing) {
-      onUpdateGoal(enteredValue, editingData.editingGoalID);
-      setEnteredValue("");
-    } else {
-      onAddGoal(enteredValue);
-      setEnteredValue("");
-    }
-    x = 0;
   };
+  useEffect(() => {
+    if (editTodos) {
+      setInputValue(editTodos.text);
+    }
+  }, [editTodos, setInputValue]);
   return (
-    <form onSubmit={formSubmitHandler}>
-      <div
-        className={`${styles["form-control"]} ${!isValid && styles.invalid}`}
-      >
-        <label>To Do Goals</label>
-        <input
-          value={enteredValue}
-          type="text"
-          onChange={goalInputChangeHandler}
-        />
+    <form onSubmit={submitHandler}>
+      <div className={`${styles["form-control"]}`}>
+        <label>To Do List</label>
+        <input value={inputValue} onChange={chnageHandler} type="text" />
       </div>
-      {isEditing ? (
-        <Button type="submit">Edit Goal</Button>
-      ) : (
-        <Button type="submit">Add Goal</Button>
-      )}
+      <Button type="submit">{!editTodos ? "Add" : "Update"}</Button>
     </form>
   );
 };

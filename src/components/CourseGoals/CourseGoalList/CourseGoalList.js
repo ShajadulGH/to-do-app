@@ -11,7 +11,7 @@ const CourseGoalList = ({ todos, setTodos, editTodos, setEditTodos }) => {
     setTodos(
       todos.map((item) => {
         if (item.id === id) {
-          return { ...item, completed: true };
+          return { ...item, completed: !item.completed };
         }
         return item;
       })

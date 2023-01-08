@@ -16,7 +16,7 @@ const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
   };
   const submitHandler = (event) => {
     event.preventDefault();
-    if (inputValue.length !== 0) {
+    if (inputValue.trim().length !== 0) {
       if (!editTodos) {
         setTodos((todos) => {
           const updatedTodo = [...todos];

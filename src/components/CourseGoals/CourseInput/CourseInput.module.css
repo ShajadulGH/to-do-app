@@ -19,6 +19,14 @@
   line-height: 1.5rem;
   padding: 0.25rem 0.5rem;
 }
+.form-control select {
+  display: block;
+  width: 100%;
+  border: 1px solid #ccc;
+  font: inherit;
+  line-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+}
 .form-control.invalid input {
   background-color: rgb(255, 174, 174);
   border: 1px solid red;

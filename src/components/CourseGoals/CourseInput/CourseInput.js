@@ -2,18 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import Button from "../../UI/Button/Button";
 import styles from "./CourseInput.module.css";
 const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
+  const [priority, setPriority] = useState("low");
   const [inputValue, setInputValue] = useState("");
   const focusRef = useRef();
   const chnageHandler = (e) => {
     setInputValue(e.target.value);
   };
-  const updateTodo = (inputValue, id, completed) => {
+  const updateTodo = (inputValue, id, completed, priority) => {
     const newTodo = todos.map((item) =>
-      item.id === id ? { text: inputValue, id, completed } : item
+      item.id === id ? { text: inputValue, id, completed, priority } : item
     );
+
     setTodos(newTodo);
     setEditTodos(null);
   };
+
   const submitHandler = (event) => {
     event.preventDefault();
     if (inputValue.trim().length !== 0) {
@@ -24,11 +27,17 @@ const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
             id: Math.floor(Math.random() * 1e17).toString(),
             text: inputValue,
             completed: false,
+            priority,
           });
           return updatedTodo;
         });
       } else {
-        updateTodo(inputValue, editTodos.id, editTodos.completed);
+        updateTodo(
+          inputValue,
+          editTodos.id,
+          editTodos.completed,
+          editTodos.priority
+        );
       }
 
       setInputValue("");
@@ -37,6 +46,7 @@ const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
   useEffect(() => {
     if (editTodos) {
       setInputValue(editTodos.text);
+      setPriority(editTodos.priority);
       focusRef.current.focus();
     }
   }, [editTodos, setInputValue]);
@@ -50,6 +60,15 @@ const CourseInput = ({ todos, setTodos, editTodos, setEditTodos }) => {
           onChange={chnageHandler}
           type="text"
         />
+        <select
+          className={`${styles["form-control"]}`}
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
       </div>
       <Button type="submit">{!editTodos ? "Add" : "Update"}</Button>
     </form>

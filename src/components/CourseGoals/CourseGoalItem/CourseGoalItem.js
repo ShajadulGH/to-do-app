@@ -14,11 +14,17 @@ const CourseGoalItem = ({
   checkHandler,
   completed,
   editHandler,
+  priority,
 }) => {
+  const priorities = {
+    low: "#aaffaa",
+    medium: "#ffeeaa",
+    high: "#ffaaaa",
+  };
   const class1 = "text";
   const class2 = "textComplete";
   return (
-    <li className="goal-item">
+    <li className="goal-item" style={{ backgroundColor: priorities[priority] }}>
       <div className={completed ? `${class1} ${class2} ` : `${class1} `}>
         {text}
       </div>

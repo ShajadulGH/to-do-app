@@ -20,8 +20,8 @@ const CourseGoalList = ({ todos, setTodos, editTodos, setEditTodos }) => {
   const editHandler = (id) => {
     const findTodo = todos.find((item) => item.id === id);
     setEditTodos(findTodo);
-    console.log(findTodo);
   };
+
   return (
     <ul className="goal-list">
       {todos.map((todo) => (
@@ -33,6 +33,7 @@ const CourseGoalList = ({ todos, setTodos, editTodos, setEditTodos }) => {
           checkHandler={checkHandler}
           completed={todo.completed}
           editHandler={editHandler}
+          priority={todo.priority}
         />
       ))}
     </ul>
